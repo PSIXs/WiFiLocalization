@@ -62,7 +62,7 @@ bool calculateAveragesForPoint (string file_name, int class_id, int point_id, bo
         continue;
 
       int averaged = signals[cnt.first] / cnt.second;
-      parsed_file << cnt.first << " " << averaged << "\n";
+      parsed_file << cnt.first << "," << averaged << "\n";
       real_cnt ++;
   }
 
