@@ -5,8 +5,8 @@
 
 using namespace std;
 
-const string PARSED_DATA_PATH = "/home/kadyrbek/Desktop/WiFiLocalization/parsed_data";
-const string DATA_PATH = "/home/kadyrbek/Desktop/WiFiLocalization/data";
+const string PARSED_DATA_PATH = "/home/kadyrbek/Desktop/WiFiLocalization/parsed_data/lg";
+const string DATA_PATH = "/home/kadyrbek/Desktop/WiFiLocalization/data/lg";
 
 bool calculateAveragesForPoint (string file_name, int class_id, int point_id, bool is_test = 0) {
   map<string, int> counter;
@@ -95,7 +95,7 @@ void startAveraging(int num_classes, string data_folder, string file_name_preffi
 }
 
 int main(int argc, char const *argv[]) {
-  const string preffix = "t202";
+  const string preffix = "lg";
   const int num_classes = 9;
 
   startAveraging(num_classes, DATA_PATH, preffix);
