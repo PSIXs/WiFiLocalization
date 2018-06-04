@@ -2,10 +2,13 @@
 #include <fstream>
 #include <map>
 #include <set>
+#include <vector>
+#include <algorithm>
+
 
 using namespace std;
 
-const string PARSED_DATA_PATH = "/home/kadyrbek/Desktop/WiFiLocalization/parsed_data/lg";
+const string PARSED_DATA_PATH = "/home/kadyrbek/Desktop/WiFiLocalization/parsed_data/";
 const string DATA_PATH = "/home/kadyrbek/Desktop/WiFiLocalization/data/lg";
 
 bool calculateAveragesForPoint (string file_name, int class_id, int point_id, bool is_test = 0) {
@@ -15,16 +18,16 @@ bool calculateAveragesForPoint (string file_name, int class_id, int point_id, bo
 
   ifstream file(file_name);
   if (file.fail()) {
-    // cout << "Can't find the file " << file_name << "\n";
+    cout << "Can't find the file " << file_name << "\n";
     return false;
   }
 
-  static const string temp_folder_name = "t203";
+  string temp_folder_name = (is_test? "lg/tests" : "lg");
   string parsed_data_file_path = PARSED_DATA_PATH + "/" + temp_folder_name + "/"
                                  + to_string(class_id)
                                  + "."
-                                 + to_string(point_id)
-                                 + (is_test ? ".test" : "");
+                                 + to_string(point_id);
+
   ofstream parsed_file;
   parsed_file.open(parsed_data_file_path);
   if(!parsed_file.is_open()) {
@@ -73,17 +76,26 @@ bool calculateAveragesForPoint (string file_name, int class_id, int point_id, bo
 
 void calculateAveragesForClass(string file_class_name, int class_id, int num_files = 10) {
   // train data
+  vector<int> test_points = {rand() % 10 + 1};
+  int rand_num;
+  while (test_points.size() < 3){
+    while (test_points.back() == (rand_num = (rand() % 10 + 1))); // 30% of data
+    test_points.push_back(rand_num);
+  }
+
+  for (int point_id : test_points) { // tests
+    cout << "test point id = " << point_id << "\n";
+
+    string file_name = file_class_name + "." + to_string(point_id) + ".txt";
+    calculateAveragesForPoint(file_name, class_id, point_id, 1);
+  }cout << "\n";
+
   for (int point_id = 1 ; point_id <= num_files ; ++point_id) {
+    if (find(test_points.begin(), test_points.end(), point_id) != test_points.end())
+      continue;
     string file_name = file_class_name + "." + to_string(point_id) + ".txt";
     calculateAveragesForPoint(file_name, class_id, point_id);
   }
-
-  // test data
-  for (int point_id = 1 ; point_id <= num_files ; ++point_id) {
-    string file_name = file_class_name + ".test" + to_string(point_id) + ".txt";
-    calculateAveragesForPoint(file_name, class_id, point_id, 1);
-  }
-
 }
 
 
@@ -96,7 +108,8 @@ void startAveraging(int num_classes, string data_folder, string file_name_preffi
 
 int main(int argc, char const *argv[]) {
   const string preffix = "lg";
-  const int num_classes = 9;
+  const int num_classes = 16;
+  srand(time(NULL));
 
   startAveraging(num_classes, DATA_PATH, preffix);
   return 0;
