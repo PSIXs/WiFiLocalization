@@ -25,7 +25,7 @@ void Point::Input(string file_name) {
 	ifstream file(file_name);
 	if (file.fail()) {
     	 cout << "Can't find the file " << file_name << "\n";
-    	exit(0);
+    	return;
   	}
   //	int size = 0;
   	string line;
