@@ -72,7 +72,7 @@ void write (string file_path) {
   }
   for (int i = 0 ; i < 160 ; ++i) {
     fi << new_data[i][0];
-    for (int j = 0 ; j < new_data[i].size(); ++j) {
+    for (int j = 1 ; j < new_data[i].size(); ++j) {
       fi << "," << new_data[i][j];
     }
     fi << "\n";
