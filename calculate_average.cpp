@@ -76,6 +76,7 @@ bool calculateAveragesForPoint (string file_name, int class_id, int point_id, bo
 
 void calculateAveragesForClass(string file_class_name, int class_id, int num_files = 10) {
   // train data
+/*
   vector<int> test_points = {rand() % 10 + 1};
   int rand_num;
   while (test_points.size() < 3){
@@ -84,15 +85,13 @@ void calculateAveragesForClass(string file_class_name, int class_id, int num_fil
   }
 
   for (int point_id : test_points) { // tests
-    cout << "test point id = " << point_id << "\n";
-
     string file_name = file_class_name + "." + to_string(point_id) + ".txt";
     calculateAveragesForPoint(file_name, class_id, point_id, 1);
-  }cout << "\n";
-
+  }
+  */
   for (int point_id = 1 ; point_id <= num_files ; ++point_id) {
-    if (find(test_points.begin(), test_points.end(), point_id) != test_points.end())
-      continue;
+    // if (find(test_points.begin(), test_points.end(), point_id) != test_points.end())
+      //continue;
     string file_name = file_class_name + "." + to_string(point_id) + ".txt";
     calculateAveragesForPoint(file_name, class_id, point_id);
   }
