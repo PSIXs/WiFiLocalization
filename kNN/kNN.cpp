@@ -6,7 +6,7 @@
 #include <map>
 using namespace std;
 
-const string PARSED_DATA_PATH = "/Users/tynchtykbekkaldybaev/Desktop/WiFiLocalization/parsed_data/t203/";
+const string PARSED_DATA_PATH = "/Users/tynchtykbekkaldybaev/Desktop/WiFiLocalization/parsed_data/lg/";
 vector < Point > parsed_points;
 
 vector < Point > test_points;
@@ -39,12 +39,14 @@ void initialize_data(int number_of_classes,int point_per_class, string komnata){
 
 }
 
-double getDiff(Point test, Point current) {
-	double error = 0;
+pair <int , double> getDiff(Point test, Point current) {
+	pair <int , double> error;
+	error.first = error.second = 0;
 	for(int i=0; i<test.Data.size(); i++) {
 		for(int j=0; j<current.Data.size(); j++) {
 			if(test.Data[i].first == current.Data[j].first) {
-				error += abs(test.Data[i].second - current.Data[j].second);
+				error.second += abs(test.Data[i].second - current.Data[j].second);
+				error.first++;
 				break;
 			}
 		}
@@ -54,22 +56,21 @@ double getDiff(Point test, Point current) {
 
 
 //  GET ERRORS FOR CERTAIN POINT
-vector < pair <double, string> > getErrors(Point test) {
-	vector < pair <double, string> > errors;
+vector < pair < pair < int, double > , string> >  getErrors(Point test) {
+	vector < pair < pair < int, double > , string> >  errors;
 	for(int i=0; i<parsed_points.size(); i++) {
 			Point current = parsed_points[i];
-			double er = getDiff(test, current);
+			pair <int , double> er = getDiff(test, current);
 			errors.push_back(make_pair(er, current.Class));
 	}
-
 	return errors;
 }
 
 
 
 
-bool cmp(pair <double, string> a, pair <double, string> b) {
-	return a.first < b.first;
+bool cmp(pair < pair < int, double > , string >  a, pair < pair < int, double > , string>  b) {
+	return (a.first.first > b.first.first) || (a.first.first == b.first.first && a.first.second < b.first.second);
 }
 
 void run_for_one_test(int KNN, string test_name){
@@ -77,7 +78,7 @@ void run_for_one_test(int KNN, string test_name){
 
 	Point test1;
 	test1.Input(test_name);
-	vector < pair <double, string> > Errors;
+	vector < pair < pair < int, double > , string> > Errors;
 	Errors = getErrors(test1);
 	sort(Errors.begin(), Errors.end(), cmp);
 	
@@ -87,7 +88,7 @@ void run_for_one_test(int KNN, string test_name){
 	for(int i=0; i<min(KNN, size); i++) {
 		string key = "Class " + Errors[i].second;
 		m[key] ++;
-		cout << Errors[i].first <<  "  " << Errors[i].second << endl;
+		cout << Errors[i].first.first << "  " << Errors[i].first.second <<  "  " << Errors[i].second << endl;
 	}
 	it = m.end();
 	it--;
@@ -99,16 +100,17 @@ void run_for_one_test(int KNN, string test_name){
 
 }
 int main(){
-	int number_of_classes = 9;
-	int number_of_point_for_each_class = 5;
+	int number_of_classes = 16;
+	int number_of_point_for_each_class = 10;
 	//int number_of_points = number_of_classes * number_of_point_for_each_class;
-	string komnata = "t203";
+	string komnata = "lg";
 
 	initialize_data(number_of_classes, number_of_point_for_each_class , komnata);
 	
-	string test_name = "/Users/tynchtykbekkaldybaev/Desktop/WiFiLocalization/parsed_data/tests/1.2.test";
+	string test_name = "/Users/tynchtykbekkaldybaev/Desktop/WiFiLocalization/parsed_data/lg/tests/9.10";
 
-	int KNN = 1;
+	int KNN = 9;
+
 
 	run_for_one_test(KNN, test_name);
 	
